@@ -5,6 +5,7 @@ import StarWarsContext from './StarWarsContext';
 function Provider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [titlesTable, setTitlesTable] = useState([]);
+  const [filterName, setFilterName] = useState('');
 
   useEffect(() => {
     const getPlanetsApi = async () => {
@@ -22,11 +23,16 @@ function Provider({ children }) {
     getPlanetsApi();
   }, []);
 
-  console.log(planets);
+  const handleInputFilterName = ({ target: { value } }) => {
+    setFilterName(value);
+  };
+
   const value = useMemo(() => ({
     planets,
     titlesTable,
-  }), [planets, titlesTable]);
+    filterName,
+    handleInputFilterName,
+  }), [planets, titlesTable, filterName]);
 
   return (
     <StarWarsContext.Provider value={ value }>
