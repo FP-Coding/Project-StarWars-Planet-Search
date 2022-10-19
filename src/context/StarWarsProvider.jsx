@@ -9,10 +9,6 @@ function Provider({ children }) {
   const [filterValue, setFilterValue] = useState('0');
   const [filterComparison, setFilterComparison] = useState('maior que');
   const [filterColumn, setFilterColumn] = useState('population');
-  const [
-    isFilteringBySomeColumnNumber,
-    setIsFilteringBySomeColumnNumber,
-  ] = useState(false);
 
   useEffect(() => {
     const getPlanetsApi = async () => {
@@ -34,31 +30,59 @@ function Provider({ children }) {
     setFilterName(value);
   };
 
-  const handleClickFilter = (value, comparison, column) => {
+  const handleInputFilterValue = ({ target: { value } }) => {
     setFilterValue(value);
-    setFilterComparison(comparison);
-    setFilterColumn(column);
-    setIsFilteringBySomeColumnNumber(true);
   };
+
+  const handleSelectFilterComparison = ({ target: { value } }) => {
+    setFilterComparison(value);
+  };
+
+  const handleSelectFilterColumn = ({ target: { value } }) => {
+    setFilterColumn(value);
+  };
+
+  function handleClickFilter() {
+    if (filterComparison === 'maior que') {
+      const filtered = planets.filter((planet) => (
+        Number(planet[filterColumn]) > Number(filterValue)
+      ));
+      setPlanets(filtered);
+    }
+    if (filterComparison === 'menor que') {
+      const filtered = planets.filter((planet) => (
+        Number(planet[filterColumn]) < Number(filterValue)
+      ));
+      setPlanets(filtered);
+    }
+    if (filterComparison === 'igual a') {
+      const filtered = planets.filter((planet) => (
+        Number(planet[filterColumn]) === Number(filterValue)
+      ));
+      setPlanets(filtered);
+    }
+  }
 
   const value = useMemo(() => ({
     planets,
     titlesTable,
     filterName,
-    filterValue,
-    filterComparison,
     filterColumn,
-    isFilteringBySomeColumnNumber,
+    filterValue,
+    handleInputFilterValue,
+    handleSelectFilterComparison,
+    handleSelectFilterColumn,
     handleInputFilterName,
     handleClickFilter,
   }), [
     planets,
     titlesTable,
     filterName,
-    filterValue,
-    filterComparison,
-    filterColumn,
-    isFilteringBySomeColumnNumber,
+    handleInputFilterValue,
+    handleSelectFilterComparison,
+    handleSelectFilterColumn,
+    handleInputFilterName,
+    handleClickFilter,
   ]);
 
   return (

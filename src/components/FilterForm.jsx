@@ -1,28 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function FilterForm() {
-  const [filterValue, setFilterValue] = useState('0');
-  const [filterComparison, setFilterComparison] = useState('maior que');
-  const [filterColumn, setFilterColumn] = useState('population');
-
   const {
     filterName,
+    filterValue,
+    filterComparison,
+    filterColumn,
     handleInputFilterName,
+    handleInputFilterValue,
+    handleSelectFilterComparison,
+    handleSelectFilterColumn,
     handleClickFilter,
   } = useContext(StarWarsContext);
-
-  const handleInputFilterValue = ({ target: { value } }) => {
-    setFilterValue(value);
-  };
-
-  const handleSelectFilterComparison = ({ target: { value } }) => {
-    setFilterComparison(value);
-  };
-
-  const handleSelectFilterColumn = ({ target: { value } }) => {
-    setFilterColumn(value);
-  };
 
   return (
     <div>
@@ -77,7 +67,7 @@ function FilterForm() {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ () => handleClickFilter(filterValue, filterComparison, filterColumn) }
+        onClick={ handleClickFilter }
       >
         Filter
       </button>

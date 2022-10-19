@@ -6,24 +6,7 @@ function Table() {
     planets,
     titlesTable,
     filterName,
-    filterValue,
-    filterComparison,
-    filterColumn,
-    isFilteringBySomeColumnNumber,
   } = useContext(StarWarsContext);
-  const planetsWithFilter = isFilteringBySomeColumnNumber
-    ? planets.filter((planet) => {
-      switch (filterComparison) {
-      case 'maior que':
-        return Number(planet[filterColumn]) > Number(filterValue);
-      case 'menor que':
-        return Number(planet[filterColumn]) < Number(filterValue);
-      case 'igual a':
-        return Number(planet[filterColumn]) === Number(filterValue);
-      default:
-        return planet;
-      }
-    }) : planets;
 
   return (
     <table>
@@ -35,7 +18,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        { planets.length !== 0 && planetsWithFilter
+        { planets.length !== 0 && planets
           .filter(({ name: namePlanet }) => namePlanet.includes(filterName))
           .map(({
             name,
