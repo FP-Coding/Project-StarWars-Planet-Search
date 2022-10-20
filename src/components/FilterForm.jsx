@@ -8,6 +8,7 @@ function FilterForm() {
     filterComparison,
     filterColumn,
     filters,
+    optionsFilter,
     handleClickRemoveAllFilters,
     handleClickRemoveFilter,
     handleInputFilterName,
@@ -17,18 +18,13 @@ function FilterForm() {
     handleClickFilter,
   } = useContext(StarWarsContext);
 
-  const optionsFilterColumn = [
+  const optionsSort = [
+    'population',
     'orbital_period',
     'diameter',
     'rotation_period',
     'surface_water',
-    'population',
   ];
-
-  const useredFilters = filters.map(({ filterColumn: columnName }) => columnName);
-  const optionsFiltered = optionsFilterColumn.filter((option) => (
-    !useredFilters.includes(option) && option
-  ));
 
   return (
     <div>
@@ -50,9 +46,9 @@ function FilterForm() {
           value={ filterColumn }
           onChange={ handleSelectFilterColumn }
         >
-          { optionsFiltered
+          { optionsFilter
             .map((option) => (
-              <option key={ option } value={ option }>{ option }</option>
+              <option key={ `${option} - filter` } value={ option }>{ option }</option>
             )) }
         </select>
       </label>
@@ -96,10 +92,51 @@ function FilterForm() {
             onClick={ () => handleClickRemoveFilter(filterObject) }
           >
             Remover Filtro
-
           </button>
         </p>
       )) }
+      <div>
+        <label htmlFor="column-sort">
+          Column:
+          <select
+            id="column-sort"
+            data-testid="column-sort"
+            value={ filterColumn }
+            onChange={ handleSelectFilterColumn }
+          >
+            { optionsSort
+              .map((option) => (
+                <option key={ `${option} - sort` } value={ option }>{ option }</option>
+              )) }
+          </select>
+        </label>
+        <label htmlFor="asc">
+          <input
+            id="asc"
+            name="sort"
+            data-testid="column-sort-input-asc"
+            type="radio"
+            value="ASC"
+          />
+          ASC
+        </label>
+        <label htmlFor="desc">
+          <input
+            id="desc"
+            name="sort"
+            data-testid="column-sort-input-desc"
+            type="radio"
+            value="DESC"
+          />
+          DESC
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+        >
+          Ordernar
+        </button>
+      </div>
       <button
         type="button"
         data-testid="button-remove-filters"

@@ -2,6 +2,14 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { ReactNode } from 'prop-types';
 import StarWarsContext from './StarWarsContext';
 
+const optionsFilterColumn = [
+  'orbital_period',
+  'diameter',
+  'rotation_period',
+  'surface_water',
+  'population',
+];
+
 function Provider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [api, setDataApi] = useState([]);
@@ -12,6 +20,7 @@ function Provider({ children }) {
   const [filterColumn, setFilterColumn] = useState('population');
   const [filters, setFilters] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [optionsFilter, setOptions] = useState(optionsFilterColumn);
 
   useEffect(() => {
     const getPlanetsApi = async () => {
@@ -59,11 +68,21 @@ function Provider({ children }) {
     setIsFiltering(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const filterOption = () => {
+    const useredFilters = filters.map(({ filterColumn: columnName }) => columnName);
+    const optionsFiltered = optionsFilter.filter((option) => (
+      !useredFilters.includes(option) && option
+    ));
+    setOptions(optionsFiltered);
+  };
+
   useEffect(() => {
     if (isFiltering) {
+      filterOption();
       filteringPlanets();
     }
-  }, [isFiltering, filteringPlanets]);
+  }, [isFiltering, filteringPlanets, filterOption]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleInputFilterName = ({ target: { value } }) => {
@@ -100,9 +119,11 @@ function Provider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleClickRemoveFilter = (object) => {
     const arrayWithoutFilterParam = filters
-      .filter(({ filterValue: filterByValue }) => filterByValue !== object.filterValue);
-    setPlanets(api);
+      .filter(({ filterColumn: filterByColumn }) => filterByColumn !== object.filterColumn);
+    console.log(arrayWithoutFilterParam);
     setFilters(arrayWithoutFilterParam);
+    setPlanets(api);
+    setIsFiltering(true);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,6 +139,7 @@ function Provider({ children }) {
     filterColumn,
     filterValue,
     filters,
+    optionsFilter,
     handleClickRemoveAllFilters,
     handleClickRemoveFilter,
     handleInputFilterValue,
@@ -126,6 +148,7 @@ function Provider({ children }) {
     handleInputFilterName,
     handleClickFilter,
   }), [
+    optionsFilter,
     filters,
     planets,
     titlesTable,
