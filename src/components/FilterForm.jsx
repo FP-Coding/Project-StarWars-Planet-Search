@@ -9,6 +9,10 @@ function FilterForm() {
     filterColumn,
     filters,
     optionsFilter,
+    ordenationValueRadio,
+    columnSort,
+    handleSelectSortColumn,
+    handleOrdenationClick,
     handleClickRemoveAllFilters,
     handleClickRemoveFilter,
     handleInputFilterName,
@@ -16,6 +20,7 @@ function FilterForm() {
     handleSelectFilterComparison,
     handleSelectFilterColumn,
     handleClickFilter,
+    handleInputRadioOrdenation,
   } = useContext(StarWarsContext);
 
   const optionsSort = [
@@ -101,8 +106,8 @@ function FilterForm() {
           <select
             id="column-sort"
             data-testid="column-sort"
-            value={ filterColumn }
-            onChange={ handleSelectFilterColumn }
+            value={ columnSort }
+            onChange={ handleSelectSortColumn }
           >
             { optionsSort
               .map((option) => (
@@ -110,29 +115,36 @@ function FilterForm() {
               )) }
           </select>
         </label>
-        <label htmlFor="asc">
-          <input
-            id="asc"
-            name="sort"
-            data-testid="column-sort-input-asc"
-            type="radio"
-            value="ASC"
-          />
-          ASC
-        </label>
-        <label htmlFor="desc">
-          <input
-            id="desc"
-            name="sort"
-            data-testid="column-sort-input-desc"
-            type="radio"
-            value="DESC"
-          />
-          DESC
-        </label>
+        <div>
+          <label htmlFor="asc">
+            <input
+              id="asc"
+              name="sort"
+              data-testid="column-sort-input-asc"
+              type="radio"
+              value="ASC"
+              checked={ ordenationValueRadio === 'ASC' }
+              onChange={ handleInputRadioOrdenation }
+            />
+            ASC
+          </label>
+          <label htmlFor="desc">
+            <input
+              id="desc"
+              name="sort"
+              data-testid="column-sort-input-desc"
+              type="radio"
+              value="DESC"
+              checked={ ordenationValueRadio === 'DESC' }
+              onChange={ handleInputRadioOrdenation }
+            />
+            DESC
+          </label>
+        </div>
         <button
           type="button"
           data-testid="column-sort-button"
+          onClick={ handleOrdenationClick }
         >
           Ordernar
         </button>

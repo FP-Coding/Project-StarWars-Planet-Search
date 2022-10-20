@@ -20,7 +20,11 @@ function Provider({ children }) {
   const [filterColumn, setFilterColumn] = useState('population');
   const [filters, setFilters] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [isSorting, setIsSorting] = useState(false);
   const [optionsFilter, setOptions] = useState(optionsFilterColumn);
+  const [ordenationValueRadio, setOrdenationValueRadio] = useState('ASC');
+  const [ordenationFilters, setOrdenationFilters] = useState({});
+  const [columnSort, setColumnSort] = useState('population');
 
   useEffect(() => {
     const getPlanetsApi = async () => {
@@ -77,12 +81,41 @@ function Provider({ children }) {
     setOptions(optionsFiltered);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const sortingTable = () => {
+    const {
+      columnSort: selectColumn,
+      ordenationValueRadio: selectOrdenation } = ordenationFilters;
+
+    const arrayOfPlanetsWithUnknownDatas = planets
+      .filter((value) => value[selectColumn] === 'unknown');
+    const withoutUnk = planets
+      .filter((value) => value[selectColumn] !== 'unknown');
+
+    if (selectOrdenation === 'ASC') {
+      const orderedPlanets = withoutUnk
+        .sort(({ [selectColumn]: elementA }, { [selectColumn]: elementB }) => (
+          elementA - elementB));
+      setPlanets([...orderedPlanets, ...arrayOfPlanetsWithUnknownDatas]);
+    }
+    if (selectOrdenation === 'DESC') {
+      const orderedPlanets = withoutUnk
+        .sort(({ [selectColumn]: elementA }, { [selectColumn]: elementB }) => (
+          elementB - elementA));
+      setPlanets([...orderedPlanets, ...arrayOfPlanetsWithUnknownDatas]);
+    }
+    setIsSorting(false);
+  };
+
   useEffect(() => {
     if (isFiltering) {
       filterOption();
       filteringPlanets();
     }
-  }, [isFiltering, filteringPlanets, filterOption]);
+    if (isSorting) {
+      sortingTable();
+    }
+  }, [isFiltering, isSorting, planets, sortingTable, filteringPlanets, filterOption]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleInputFilterName = ({ target: { value } }) => {
@@ -117,11 +150,29 @@ function Provider({ children }) {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleSelectSortColumn = ({ target: { value } }) => {
+    setColumnSort(value);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleInputRadioOrdenation = ({ target: { value } }) => {
+    setOrdenationValueRadio(value);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleOrdenationClick = () => {
+    setOrdenationFilters(({
+      ordenationValueRadio,
+      columnSort,
+    }));
+    setIsSorting(true);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleClickRemoveFilter = (object) => {
     const arrayWithoutFilterParam = filters
       .filter(({ filterColumn: filterByColumn }) => (
         filterByColumn !== object.filterColumn));
-    console.log(arrayWithoutFilterParam);
     setFilters(arrayWithoutFilterParam);
     setPlanets(api);
     setIsFiltering(true);
@@ -141,6 +192,12 @@ function Provider({ children }) {
     filterValue,
     filters,
     optionsFilter,
+    ordenationValueRadio,
+    columnSort,
+    ordenationFilters,
+    handleOrdenationClick,
+    handleSelectSortColumn,
+    handleInputRadioOrdenation,
     handleClickRemoveAllFilters,
     handleClickRemoveFilter,
     handleInputFilterValue,
@@ -149,6 +206,8 @@ function Provider({ children }) {
     handleInputFilterName,
     handleClickFilter,
   }), [
+    ordenationFilters,
+    columnSort,
     optionsFilter,
     filters,
     planets,
@@ -156,6 +215,10 @@ function Provider({ children }) {
     filterName,
     filterColumn,
     filterValue,
+    ordenationValueRadio,
+    handleOrdenationClick,
+    handleSelectSortColumn,
+    handleInputRadioOrdenation,
     handleClickRemoveAllFilters,
     handleClickRemoveFilter,
     handleInputFilterValue,
