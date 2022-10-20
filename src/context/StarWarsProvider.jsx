@@ -119,7 +119,8 @@ function Provider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleClickRemoveFilter = (object) => {
     const arrayWithoutFilterParam = filters
-      .filter(({ filterColumn: filterByColumn }) => filterByColumn !== object.filterColumn);
+      .filter(({ filterColumn: filterByColumn }) => (
+        filterByColumn !== object.filterColumn));
     console.log(arrayWithoutFilterParam);
     setFilters(arrayWithoutFilterParam);
     setPlanets(api);
