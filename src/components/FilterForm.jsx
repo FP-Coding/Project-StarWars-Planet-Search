@@ -7,12 +7,28 @@ function FilterForm() {
     filterValue,
     filterComparison,
     filterColumn,
+    filters,
+    handleClickRemoveAllFilters,
+    handleClickRemoveFilter,
     handleInputFilterName,
     handleInputFilterValue,
     handleSelectFilterComparison,
     handleSelectFilterColumn,
     handleClickFilter,
   } = useContext(StarWarsContext);
+
+  const optionsFilterColumn = [
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+    'population',
+  ];
+
+  const useredFilters = filters.map(({ filterColumn: columnName }) => columnName);
+  const optionsFiltered = optionsFilterColumn.filter((option) => (
+    !useredFilters.includes(option) && option
+  ));
 
   return (
     <div>
@@ -34,11 +50,10 @@ function FilterForm() {
           value={ filterColumn }
           onChange={ handleSelectFilterColumn }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          { optionsFiltered
+            .map((option) => (
+              <option key={ option } value={ option }>{ option }</option>
+            )) }
         </select>
       </label>
       <label htmlFor="comparison-filter">
@@ -70,6 +85,27 @@ function FilterForm() {
         onClick={ handleClickFilter }
       >
         Filter
+      </button>
+      { filters.map((filterObject) => (
+        <p data-testid="filter" key={ filterObject.filterValue }>
+          { `${filterObject.filterColumn} 
+          ${filterObject.filterComparison} 
+          ${filterObject.filterValue}` }
+          <button
+            type="button"
+            onClick={ () => handleClickRemoveFilter(filterObject) }
+          >
+            Remover Filtro
+
+          </button>
+        </p>
+      )) }
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ handleClickRemoveAllFilters }
+      >
+        Remover Filtros
       </button>
     </div>
   );

@@ -7,7 +7,6 @@ function Table() {
     titlesTable,
     filterName,
   } = useContext(StarWarsContext);
-
   return (
     <table>
       <thead>
