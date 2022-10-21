@@ -95,6 +95,7 @@ function FilterForm() {
           <button
             type="button"
             onClick={ () => handleClickRemoveFilter(filterObject) }
+            data-testid={ `rmv-filtro-${filterObject.filterColumn}` }
           >
             Remover Filtro
           </button>

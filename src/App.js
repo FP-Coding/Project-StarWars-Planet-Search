@@ -1,13 +1,14 @@
 import React from 'react';
 import FilterForm from './components/FilterForm';
 import Table from './components/Table';
+import Provider from './context/StarWarsProvider';
 
 function App() {
   return (
-    <div>
+    <Provider>
       <FilterForm />
       <Table />
-    </div>
+    </Provider>
   );
 }
 

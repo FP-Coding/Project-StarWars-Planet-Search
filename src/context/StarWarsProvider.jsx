@@ -45,6 +45,7 @@ function Provider({ children }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const filteringPlanets = () => {
+    setFilterColumn(optionsFilter[0]);
     filters.forEach(({
       filterValue: filterByValue,
       filterComparison: filterByComparison,
