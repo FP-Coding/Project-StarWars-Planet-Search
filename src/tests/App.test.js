@@ -35,20 +35,19 @@ describe("verificando Form", () => {
     });
     expect(quantityComparison).toBeInTheDocument();
 
-    const btnFilter = screen.getByRole('button', {  name: /filter/i});
+    const btnFilter = screen.getByRole('button', { name: /filter/i });
     expect(btnFilter).toBeInTheDocument();
-    
+
     await waitFor(() => {
       const planets = screen.getAllByTestId("planet-name");
       expect(planets).toHaveLength(10);
     }, { timeout: 50000 })
-    
-    
+
     userEvent.selectOptions(selectColumnFilter, "diameter");
     userEvent.selectOptions(selectOperatorFilter, "maior que");
     userEvent.clear(quantityComparison)
     userEvent.type(quantityComparison, '9000')
-    
+
     userEvent.click(btnFilter);
 
     await waitFor(() => {
@@ -80,7 +79,7 @@ describe("verificando Form", () => {
       expect(planets).toHaveLength(1);
     }, { timeout: 50000 })
 
-    
+
     const filterApllyed = screen.getByText(/diameter maior que 9000/i);
     expect(filterApllyed).toBeInTheDocument()
     const buttonFirstFilter = screen.getByTestId('rmv-filtro-diameter');
@@ -111,7 +110,7 @@ describe("verificando Form", () => {
   });
   jest.setTimeout('10000')
   test('se a ordenação funciona', async () => {
-    render(<App/>)
+    render(<App />)
     const getPlanets = await screen.findAllByTestId('planet-name')
     expect(getPlanets[0].innerHTML).toBe('Tatooine')
     const selectColumnSort = screen.getByTestId("column-sort");
@@ -129,10 +128,10 @@ describe("verificando Form", () => {
 
     const btnOrdenar = screen.getByTestId('column-sort-button')
     expect(btnOrdenar).toBeInTheDocument();
-    
+
     userEvent.click(btnOrdenar);
 
-    const getPlanetsOrderedDesc =  await screen.findAllByTestId('planet-name')
+    const getPlanetsOrderedDesc = await screen.findAllByTestId('planet-name')
     expect(getPlanetsOrderedDesc[0].innerHTML).toBe('Coruscant')
 
     userEvent.selectOptions(selectColumnSort, 'population')
@@ -141,9 +140,7 @@ describe("verificando Form", () => {
 
     userEvent.click(btnOrdenar);
 
-
-    const getPlanetsOrderedAsc =  await screen.findAllByTestId('planet-name')
+    const getPlanetsOrderedAsc = await screen.findAllByTestId('planet-name')
     expect(getPlanetsOrderedAsc[0].innerHTML).toBe('Yavin IV')
-
   })
 });
