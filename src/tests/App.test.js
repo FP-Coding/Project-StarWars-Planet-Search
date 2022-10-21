@@ -41,7 +41,7 @@ describe("verificando Form", () => {
     await waitFor(() => {
       const planets = screen.getAllByTestId("planet-name");
       expect(planets).toHaveLength(10);
-    })
+    }, { timeout: 50000 })
     
     
     userEvent.selectOptions(selectColumnFilter, "diameter");
@@ -51,6 +51,11 @@ describe("verificando Form", () => {
     
     userEvent.click(btnFilter);
 
+    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-name");
+      expect(planets).toHaveLength(7);
+    }, { timeout: 50000 })
+
     userEvent.selectOptions(selectColumnFilter, "population");
     userEvent.selectOptions(selectOperatorFilter, "menor que");
     userEvent.clear(quantityComparison)
@@ -58,12 +63,22 @@ describe("verificando Form", () => {
 
     userEvent.click(btnFilter);
 
+    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-name");
+      expect(planets).toHaveLength(2);
+    }, { timeout: 50000 })
+
     userEvent.selectOptions(selectColumnFilter, "rotation_period");
     userEvent.selectOptions(selectOperatorFilter, "igual a");
     userEvent.clear(quantityComparison)
     userEvent.type(quantityComparison, '23')
 
     userEvent.click(btnFilter);
+
+    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-name");
+      expect(planets).toHaveLength(1);
+    }, { timeout: 50000 })
 
     
     const filterApllyed = screen.getByText(/diameter maior que 9000/i);
@@ -94,9 +109,11 @@ describe("verificando Form", () => {
     expect(filterApllyed).not.toBeInTheDocument()
     expect(secondFilterApllyed).not.toBeInTheDocument()
   });
-
-  test('se a ordenação funciona', () => {
+  jest.setTimeout('10000')
+  test('se a ordenação funciona', async () => {
     render(<App/>)
+    const getPlanets = await screen.findAllByTestId('planet-name')
+    expect(getPlanets[0].innerHTML).toBe('Tatooine')
     const selectColumnSort = screen.getByTestId("column-sort");
     expect(selectColumnSort).toBeInTheDocument();
 
@@ -108,12 +125,25 @@ describe("verificando Form", () => {
 
     userEvent.selectOptions(selectColumnSort, 'population')
     userEvent.click(inputRadioDesc)
+    expect(inputRadioDesc.checked).toBeTruthy()
 
-    const btnOrdenar = screen.getByRole('button', {  name: /ordernar/i})
+    const btnOrdenar = screen.getByTestId('column-sort-button')
     expect(btnOrdenar).toBeInTheDocument();
     
-    userEvent.click(btnOrdenar)
+    userEvent.click(btnOrdenar);
 
-    expect(inputRadioDesc.checked).toBeTruthy()
+    const getPlanetsOrderedDesc =  await screen.findAllByTestId('planet-name')
+    expect(getPlanetsOrderedDesc[0].innerHTML).toBe('Coruscant')
+
+    userEvent.selectOptions(selectColumnSort, 'population')
+    userEvent.click(inputRadioAsc)
+    expect(inputRadioAsc.checked).toBeTruthy()
+
+    userEvent.click(btnOrdenar);
+
+
+    const getPlanetsOrderedAsc =  await screen.findAllByTestId('planet-name')
+    expect(getPlanetsOrderedAsc[0].innerHTML).toBe('Yavin IV')
+
   })
 });

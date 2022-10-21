@@ -34,7 +34,7 @@ function Table() {
             edited,
             url,
           }) => (
-            <tr key={ name }>
+            <tr key={ name } data-testid="planet-row">
               <td data-testid="planet-name">
                 {name}
               </td>
