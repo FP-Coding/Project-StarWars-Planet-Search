@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
+import TableData from './style/TableData';
 
 function Table() {
   const {
@@ -8,7 +9,7 @@ function Table() {
     filterName,
   } = useContext(StarWarsContext);
   return (
-    <table>
+    <TableData>
       <thead>
         <tr>
           { planets.length !== 0 && titlesTable.map((title) => (
@@ -77,7 +78,7 @@ function Table() {
             </tr>
           ))}
       </tbody>
-    </table>
+    </TableData>
   );
 }
 

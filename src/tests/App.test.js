@@ -35,7 +35,7 @@ describe("verificando Form", () => {
     });
     expect(quantityComparison).toBeInTheDocument();
 
-    const btnFilter = screen.getByRole('button', { name: /filter/i });
+    const btnFilter = screen.getByTestId('button-filter');
     expect(btnFilter).toBeInTheDocument();
 
     await waitFor(() => {

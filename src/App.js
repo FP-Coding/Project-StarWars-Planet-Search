@@ -1,12 +1,12 @@
 import React from 'react';
-import FilterForm from './components/FilterForm';
+import Filters from './components/Filters';
 import Table from './components/Table';
 import Provider from './context/StarWarsProvider';
 
 function App() {
   return (
     <Provider>
-      <FilterForm />
+      <Filters />
       <Table />
     </Provider>
   );

@@ -69,7 +69,6 @@ function Provider({ children }) {
         setPlanets(filtered);
       }
     });
-    setIsFiltering(false);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +78,7 @@ function Provider({ children }) {
       !useredFilters.includes(option) && option
     ));
     setOptions(optionsFiltered);
+    setFilterColumn(optionsFiltered[0]);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,16 +101,17 @@ function Provider({ children }) {
           elementB - elementA));
       setPlanets(orderedPlanets);
     }
-    setIsSorting(false);
   };
 
   useEffect(() => {
     if (isFiltering) {
-      filterOption();
       filteringPlanets();
+      filterOption();
+      setIsFiltering(false);
     }
     if (isSorting) {
       sortingTable();
+      setIsSorting(false);
     }
   }, [isFiltering, isSorting, planets, sortingTable, filteringPlanets, filterOption]);
 
@@ -136,7 +137,6 @@ function Provider({ children }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleClickFilter = () => {
-    setFilterColumn(optionsFilter[0]);
     setFilters((prev) => [
       ...prev, {
         filterValue,
